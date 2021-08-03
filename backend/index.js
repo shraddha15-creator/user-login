@@ -29,18 +29,26 @@ const User = mongoose.model("User", userSchema)
 app.post("/register", (req, res) => {
 
     const { name, userName, email, password } = req.body
-    const user = new User({
-        name, 
-        email, 
-        password
-    })
-    user.save( err => {
-        if(err){
-            res.send(err)
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            res.send({message: "User already exist"})
         }else{
-            res.send({ message: "Successfully Registered" })
+            const user = new User({
+                name, 
+                userName,
+                email, 
+                password
+            })
+            user.save( err => {
+                if(err){
+                    res.send(err)
+                }else{
+                    res.send({ message: "Successfully Registered" })
+                }
+            })
         }
     })
+
 })
 
 app.listen(9002, console.log('Server listening on port 9002'))
