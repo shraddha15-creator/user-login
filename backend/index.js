@@ -7,7 +7,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors());
 
-// app.listen(5000, console.log('Server listening on port 5000'))
 
 mongoose.connect('mongodb://localhost:27017/myLoginRegisterDB', {
     useNewUrlParser: true,
@@ -19,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/myLoginRegisterDB', {
 const userSchema = new mongoose.Schema({
     name: String, 
     userName: String, 
+    zipcode: String,
     email: String, 
     password: String, 
 })
@@ -28,7 +28,7 @@ const User = mongoose.model("User", userSchema)
 //Routes
 app.post("/register", (req, res) => {
 
-    const { name, userName, email, password } = req.body
+    const { name, userName, zipcode, email, password } = req.body
     User.findOne({email: email}, (err, user) => {
         if(user){
             res.send({message: "User already exist"})
@@ -36,6 +36,7 @@ app.post("/register", (req, res) => {
             const user = new User({
                 name, 
                 userName,
+                zipcode,
                 email, 
                 password
             })

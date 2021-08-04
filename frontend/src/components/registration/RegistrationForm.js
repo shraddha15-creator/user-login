@@ -4,12 +4,13 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import imgUpload from '../../assets/img-upload.jpg'
 
-const RegistrationForm = () => {
+const RegistrationForm = (props) => {
   const history = useHistory();
 
   const [user, setUser] = useState({
     name: "",
     userName: "",
+    zipcode: "",
     email: "",
     password: "",
     reEnterPassword: "",
@@ -24,12 +25,14 @@ const RegistrationForm = () => {
   };
 
   const register = () => {
-    const { name, userName, email, password, reEnterPassword } = user;
-    if (name && userName && email && password && password === reEnterPassword) {
-      axios.post("http://localhost:9002/register", user).then((res) => {
-        alert(res.data.message);
-        history.push("/homepage");
-      });
+    const { name, userName, email, zipcode, password, reEnterPassword } = user;
+    if (name && userName && email && zipcode, password && password === reEnterPassword) {
+      axios.post("http://localhost:9002/register", user)
+        .then((res) => {
+          props.setRegisteredUser(user)
+          //alert(res.data.message);
+          history.push("/");
+        });
     } else {
       alert("invalid input");
     }
@@ -43,16 +46,17 @@ const RegistrationForm = () => {
       <div class="profile-pic">
         <label class="-label" for="file">
           <span class="glyphicon glyphicon-camera"> </span>
-          <span>Change Image</span>
-        </label>
-        <input id="file" type="file" onchange="loadFile(event)" />
-        <img
+          <img
           src={imgUpload}
           id="imgUpload"
           width="50"
           height="50"
         />
+        </label>
+        
+        
       </div>
+      <input id="file" type="file" onchange="loadFile(event)" />
 
       {/* <label for="img">Choose Profile Photo</label>
             <input type="file" id="img" name="img" accept="image/*" />
@@ -69,6 +73,13 @@ const RegistrationForm = () => {
         name="userName"
         value={user.userName}
         placeholder="Enter userName"
+        onChange={handleChange}
+      />
+      <input
+        type="number"
+        name="zipcode"
+        value={user.zipcode}
+        placeholder="Enter Zipcode"
         onChange={handleChange}
       />
       <input
