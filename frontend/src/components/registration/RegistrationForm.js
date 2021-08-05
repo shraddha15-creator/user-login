@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../registration/registration.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import imgUpload from '../../assets/img-upload.jpg'
+import imgUpload from "../../assets/img-upload.jpg";
 
 const RegistrationForm = (props) => {
   const history = useHistory();
@@ -14,7 +14,10 @@ const RegistrationForm = (props) => {
     email: "",
     password: "",
     reEnterPassword: "",
+    profilePhoto: "",
   });
+
+  const [selectedImg, setSelectedImg] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,39 +27,43 @@ const RegistrationForm = (props) => {
     });
   };
 
+  const handleImgInput = (e) => {
+    const inputFile = e.target.files[0]
+    const imageFormData = new FormData();
+    imageFormData.append("profilePic", inputFile);
+    setSelectedImg(URL.createObjectURL(inputFile));
+
+    axios.post("http://localhost:9002/upload/profilePic", imageFormData).then((res) => {
+      setUser({...user, profilePhoto: res.data.data._id})
+    });
+  };
+
   const register = () => {
-    const { name, userName, email, zipcode, password, reEnterPassword } = user;
-    if (name && userName && email && zipcode, password && password === reEnterPassword) {
-      axios.post("http://localhost:9002/register", user)
-        .then((res) => {
-          props.setRegisteredUser(user)
-          //alert(res.data.message);
-          history.push("/");
-        });
+    const { name, userName, email, zipcode, password, reEnterPassword, profilePhoto } = user;
+    if (
+      (name && userName && email && zipcode &&
+      password && password === reEnterPassword)
+    ) {
+      axios.post("http://localhost:9002/register", user).then((res) => {
+        props.setRegisteredUser(user);
+        history.push("/");
+      });
     } else {
-      alert("invalid input");
+      alert("Please fill all the fileds first");
     }
   };
 
   return (
     <div className="register">
-      {console.log("user", user)}
       <h1>Registration Form</h1>
 
       <div class="profile-pic">
         <label class="-label" for="file">
           <span class="glyphicon glyphicon-camera"> </span>
-          <img
-          src={imgUpload}
-          id="imgUpload"
-          width="50"
-          height="50"
-        />
+          <img src={selectedImg} placeholder={imgUpload} id="imgUpload" width="50" height="50"/>
         </label>
-        
-        
       </div>
-      <input id="file" type="file" onchange="loadFile(event)" />
+      <input id="file" type="file"  onChange={handleImgInput} />
 
       {/* <label for="img">Choose Profile Photo</label>
             <input type="file" id="img" name="img" accept="image/*" />
