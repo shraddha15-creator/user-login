@@ -60,7 +60,7 @@ const RegistrationForm = (props) => {
       <div class="profile-pic">
         <label class="-label" for="file">
           <span class="glyphicon glyphicon-camera"> </span>
-          <img src={selectedImg} placeholder={imgUpload} id="imgUpload" width="50" height="50"/>
+          <img src={selectedImg} placeholder={imgUpload} id="imgUpload" width="170" height="170"/>
         </label>
       </div>
       <input id="file" type="file"  onChange={handleImgInput} />

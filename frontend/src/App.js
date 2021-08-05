@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./components/homepage/HomePage";
 import RegistrationForm from "./components/registration/RegistrationForm";
 
+
 function App() {
   const [user, setRegisteredUser] = useState({});
 
