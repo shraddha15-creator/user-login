@@ -1,7 +1,10 @@
-import React from 'react'
-import '../homepage/homePage.css'
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import '../homepage/homePage.css';
 
-const HomePage = ({setRegisteredUser, history }) => {
+const HomePage = ({setRegisteredUser }) => {
+    const history = useHistory();
+
     return (
         <div className="homepage">
            <h1>User created Successfully </h1>
